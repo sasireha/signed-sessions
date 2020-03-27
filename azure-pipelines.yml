@@ -10,10 +10,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.x'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    configuration: 'Release'
+    projects: 'signed-sessions/PGO.Identity.SignedSessions/PGO.Identity.SignedSessions.csproj'
+- task: DotNetCoreCLI@2
