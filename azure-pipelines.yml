@@ -25,7 +25,9 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    configuration: 'Release'
-    packagesToPack: '**/*.csproj'
+    packagesToPack: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
     nobuild: true
-    versioningScheme: 'off'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0'
