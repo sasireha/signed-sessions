@@ -17,12 +17,15 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
+    configuration: 'Release'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
+    configuration: 'Release'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: '*\PGO.Identity.SignedSessions.csproj'
+    configuration: 'Release'
+    packagesToPack: '**/*.csproj'
     nobuild: true
     versioningScheme: 'off'
