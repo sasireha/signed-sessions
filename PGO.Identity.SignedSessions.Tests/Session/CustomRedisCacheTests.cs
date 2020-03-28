@@ -16,7 +16,7 @@ namespace PGO.Identity.SignedSessions.Tests.Session
 
         private readonly CustomRedisCache _customCache;
         private string sessionKey = Guid.NewGuid().ToString();
-        private const string unsignedValue = "BdGVzdHZhbHVl"; // must be base64 encoded
+        private const string unsignedValue = "dGVzdHZhbHVl"; // must be base64 encoded
         private const string signature = "tCSsoVusDeFis9E5QEtDXSsoOrnqiPQeheDXkkVkQv0="; // must be base64 encoded
         private DistributedCacheEntryOptions distributedCacheEntryOptions = new DistributedCacheEntryOptions();
         private byte[] sessionData = Encoding.UTF8.GetBytes("test session data");
