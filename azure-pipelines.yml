@@ -11,7 +11,7 @@ jobs:
     steps:
       - script: dotnet build PGO.Identity.SignedSessions/ -c Release
       - script: dotnet test PGO.Identity.SignedSessions.Tests/ -c Release --logger "trx;LogFileName=testresults.trx"4
-      - script: dotnet pack PGO.Identity.SignedSessions/PGO.Identity.SignedSessions.csproj --no-build
+      - script: dotnet pack PGO.Identity.SignedSessions/ -c Release --no-build
       - task: PublishTestResults@2
         inputs:
           testRunner: VSTest
