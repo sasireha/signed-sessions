@@ -17,4 +17,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'PGO.Identity.SignedSessions/PGO.Identity.SignedSessions.csproj'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
