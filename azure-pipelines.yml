@@ -23,6 +23,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
+    packagesToPack: '*\PGO.Identity.SignedSessions.csproj'
     nobuild: true
     versioningScheme: 'off'
