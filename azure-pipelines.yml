@@ -1,3 +1,12 @@
+variables:
+- group: nuget-deployment
+- name: 'ProjectPath'
+  value: 'PGO.Identity.SignedSessions'
+- name: 'TestPath'
+  value: 'PGO.Identity.SignedSessions.Tests'
+- name: 'ReleasePath'
+  value: 'PGO.Identity.SignedSessions/bin/Release'
+
 resources:
   containers:
     - container: ci-build-dotnet
@@ -9,9 +18,10 @@ jobs:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet
     steps:
-      - script: dotnet build PGO.Identity.SignedSessions/ -c Release
-      - script: dotnet test PGO.Identity.SignedSessions.Tests/ -c Release --logger "trx;LogFileName=testresults.trx"4
-      - script: dotnet pack PGO.Identity.SignedSessions/ -c Release --no-build
+      - script: dotnet build $(ProjectPath) -c Release
+      - script: dotnet test $(TestPath) -c Release --logger "trx;LogFileName=testresults.trx"4
+      - script: dotnet pack $(ProjectPath) -c Release --no-build
+      - script: dotnet nuget push $(ReleasePath) -k $(nuget.key) -s $(nuget.url)
       - task: PublishTestResults@2
         inputs:
           testRunner: VSTest
