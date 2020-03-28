@@ -5,7 +5,7 @@ variables:
 - name: 'TestPath'
   value: 'PGO.Identity.SignedSessions.Tests'
 - name: 'ReleasePath'
-  value: 'PGO.Identity.SignedSessions/bin/Release'
+  value: 'PGO.Identity.SignedSessions/bin/Release/'
 
 resources:
   containers:
