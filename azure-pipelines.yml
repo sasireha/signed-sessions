@@ -25,7 +25,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    projects: ''
+    projects: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
     nobuild: true
     versioningScheme: 'off'
     arguments: '--no-build'
