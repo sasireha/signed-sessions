@@ -1,22 +1,31 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+variables:
+- group: nuget-deployment
+- name: 'ProjectPath'
+  value: 'PGO.Identity.SignedSessions'
+- name: 'TestPath'
+  value: 'PGO.Identity.SignedSessions.Tests'
+- name: 'ReleasePath'
+  value: 'PGO.Identity.SignedSessions/bin/Release/'
 
-trigger:
-- master
+resources:
+  containers:
+    - container: ci-build-dotnet
+      image: mcr.microsoft.com/dotnet/core/sdk:3.1.101
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+  - job: build_and_test_pack_publish_job
+    pool:
+      vmImage: "Ubuntu 16.04"
+    container: ci-build-dotnet
+    steps:
+      - script: dotnet build $(ProjectPath) -c Release
+      - script: dotnet test $(TestPath) -c Release --logger "trx;LogFileName=testresults.trx"4
+      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.1
+      - script: dotnet nuget push $(ReleasePath) -k $(nuget.key) -s $(nuget.url)
+      - task: PublishTestResults@2
+        inputs:
+          testRunner: VSTest
+          testResultsFiles: "**/*.trx"
+          failTaskOnFailedTests: true
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.1.x'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'
+
