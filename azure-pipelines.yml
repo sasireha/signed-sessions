@@ -22,12 +22,8 @@ steps:
   inputs:
     command: 'test'
     configuration: 'Release'
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   inputs:
-    command: 'pack'
-    packagesToPack: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
+    command: 'restore'
+    restoreSolution: '**/*.sln'
+    feedsToUse: 'select'
