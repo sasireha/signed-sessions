@@ -2,6 +2,8 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+variables:
+ projects: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
 
 trigger:
 - master
@@ -20,8 +22,12 @@ steps:
     configuration: 'Release'
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'test'
+    configuration: 'Release'
+- task: DotNetCoreCLI@2
+  inputs:
     command: 'pack'
-    projects: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
+    projects: $(projects)
     nobuild: true
     versioningScheme: 'off'
     arguments: '--no-build'
