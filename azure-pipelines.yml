@@ -24,4 +24,5 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
+    nobuild: true
     versioningScheme: 'off'
