@@ -22,8 +22,10 @@ steps:
   inputs:
     command: 'test'
     configuration: 'Release'
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
-    command: 'restore'
-    restoreSolution: '**/*.sln'
-    feedsToUse: 'select'
+    command: 'pack'
+    projects: ''
+    nobuild: true
+    versioningScheme: 'off'
+    arguments: '--no-build'
