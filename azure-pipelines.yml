@@ -5,7 +5,7 @@ variables:
 - name: 'TestPath'
   value: 'PGO.Identity.SignedSessions.Tests'
 - name: 'ReleasePath'
-  value: 'PGO.Identity.SignedSessions/bin/Release/'
+  value: 'PGO.Identity.SignedSessions/bin/Release'
 
 resources:
   containers:
@@ -21,7 +21,7 @@ jobs:
       - script: dotnet build $(ProjectPath) -c Release
       - script: dotnet test $(TestPath) -c Release --logger "trx;LogFileName=testresults.trx"4
       - script: dotnet pack $(ProjectPath) -c Release --no-build
-      - script: dotnet nuget push $(ReleasePath).*nupkg -k $(nuget.key) -s $(nuget.url) -n true
+      - script: dotnet nuget push $(ReleasePath)/*.nupkg -k $(nuget.key) -s $(nuget.url) -n true
       - task: PublishTestResults@2
         inputs:
           testRunner: VSTest
