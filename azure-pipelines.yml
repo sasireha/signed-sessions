@@ -1,3 +1,7 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
 variables:
 - group: nuget-deployment
 - name: 'ProjectPath'
@@ -7,42 +11,33 @@ variables:
 - name: 'ReleasePath'
   value: 'PGO.Identity.SignedSessions/bin/Release'
 
-resources:
-  containers:
-    - container: ci-build-dotnet
-      image: mcr.microsoft.com/dotnet/core/sdk:3.1.101
-
 pr:
 - master
 
 trigger:
 - master
 
-jobs:
-  - job: build_test_pack
-    displayName: build, test and pack        
-    pool:
-      vmImage: "Ubuntu 16.04"
-    container: ci-build-dotnet    
-    steps:
-      - script: dotnet build $(ProjectPath) -c Release
-        displayName: 'Build'
-      - script: dotnet test $(TestPath) -c Release
-        displayName: 'Test'
-      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
-        displayName: 'Pack'
+pool:
+  vmImage: 'ubuntu-latest'
 
-  - job: Push_Package
-    displayName: Push package
-    dependsOn: build_test_pack
-    pool:
-      vmImage: "Ubuntu 16.04"
-    container: ci-build-dotnet    
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-    steps:      
-      #- script: dotnet build $(ProjectPath) -c Release
-      #  displayName: 'Build'      
-      #- script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
-      #  displayName: 'Pack'
-      - script: dotnet nuget push $(ReleasePath)/*.nupkg -k $(nuget.key) -s $(nuget.url) -n true
-        displayName: 'Push'
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    configuration: 'Release'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    configuration: 'Release'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    configuration: 'Release'
+    packagesToPack: '$(ProjectPath)'
+    nobuild: true
+    versioningScheme: 'off'
+    arguments: '--no-build /p:Version=1.0.$(Build.BuildId)'
