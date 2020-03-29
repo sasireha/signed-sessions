@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+﻿    using Microsoft.Extensions.Options;
 using System;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,7 +39,6 @@ namespace PGO.Identity.SignedSessions.Signature
                 if (computedSignature.Equals(signature))
                     return true;
             }
-
             return false;
         }
     }
