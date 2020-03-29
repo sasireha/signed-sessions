@@ -33,6 +33,7 @@ steps:
     versioningScheme: 'off'
     arguments: '-c Release --no-build /p:Version=1.0.$(Build.BuildId)'
 - task: DotNetCoreCLI@2
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   inputs:
     command: custom
     custom: nuget
