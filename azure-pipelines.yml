@@ -18,17 +18,15 @@ steps:
     version: '3.1.x'
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'build'
-    configuration: 'Release'
+    command: 'build'    
+    arguments: '-c Release'
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'test'
-    configuration: 'Release'
+    command: 'test'    
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'pack'
-    configuration: 'Release'
+    command: 'pack'    
     projects: $(projects)
     nobuild: true
     versioningScheme: 'off'
-    arguments: '--no-build'
+    arguments: '-c Release --no-build /p:Version=1.0.$(Build.BuildId)'
