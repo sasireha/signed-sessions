@@ -3,16 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 variables:
-- group: nuget-deployment
-- name: 'ProjectPath'
-  value: 'PGO.Identity.SignedSessions'
-- name: 'TestPath'
-  value: 'PGO.Identity.SignedSessions.Tests'
-- name: 'ReleasePath'
-  value: 'PGO.Identity.SignedSessions/bin/Release'
-
-pr:
-- master
+ projects: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
 
 trigger:
 - master
@@ -36,8 +27,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    configuration: 'Release'
-    packagesToPack: '$(ProjectPath)'
+    projects: $(projects)
     nobuild: true
     versioningScheme: 'off'
-    arguments: '--no-build /p:Version=1.0.$(Build.BuildId)'
+    arguments: '--no-build'
