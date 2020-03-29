@@ -28,7 +28,7 @@ jobs:
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
     steps:      
       - script: dotnet build $(ProjectPath) -c Release
       - script: dotnet test $(TestPath) -c Release
