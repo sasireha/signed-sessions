@@ -20,7 +20,7 @@ jobs:
     steps:
       - script: dotnet build $(ProjectPath) -c Release
       - script: dotnet test $(TestPath) -c Release --logger "trx;LogFileName=testresults.trx"4
-      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildNumber)
+      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
       - script: dotnet nuget push $(ReleasePath)/*.nupkg -k $(nuget.key) -s $(nuget.url) -n true
       - task: PublishTestResults@2
         inputs:
