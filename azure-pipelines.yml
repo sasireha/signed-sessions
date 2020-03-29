@@ -7,6 +7,9 @@ variables:
 - name: 'projects'
   value: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
 
+pr:
+- master
+
 trigger:
 - master
 
