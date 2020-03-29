@@ -38,5 +38,5 @@ steps:
     custom: nuget
     arguments: >
       push "$(Build.ArtifactStagingDirectory)/*.nupkg"
-      - s "$(nuget.url)"
-      - k "$(nuget.key)"
+      -s "$(nuget.url)"
+      -k "$(nuget.key)"
