@@ -13,10 +13,8 @@ resources:
       image: mcr.microsoft.com/dotnet/core/sdk:3.1.101
 
 jobs:
-  - job: 'Pull_Request'
-    displayName: Pull Request    
-    pr: 
-    - master
+  - job: 'build_test_pack'
+    displayName: build, test and pack        
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
@@ -25,13 +23,12 @@ jobs:
       - script: dotnet test $(TestPath) -c Release
       - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
 
-  - job: 'Pack'
-    displayName: Pack
-    trigger: 
-    - master
+  - job: 'Push_Package'
+    displayName: Push package    
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master'
     steps:      
       - script: dotnet build $(ProjectPath) -c Release
       - script: dotnet test $(TestPath) -c Release
