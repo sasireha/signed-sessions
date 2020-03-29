@@ -14,9 +14,9 @@ resources:
 
 jobs:
   - job: 'Pull_Request'
-    displayname: 'Pull Request'    
+    displayName: Pull Request    
     pr: 
-      - master
+    - master
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
@@ -26,9 +26,9 @@ jobs:
       - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
 
   - job: 'Pack'
-    displayname: 'Pack'
+    displayName: Pack
     trigger: 
-     - master
+    - master
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
