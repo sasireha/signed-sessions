@@ -7,6 +7,9 @@ variables:
 - name: 'ReleasePath'
   value: 'PGO.Identity.SignedSessions/bin/Release'
 
+pr:
+- master
+
 resources:
   containers:
     - container: ci-build-dotnet
