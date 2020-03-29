@@ -3,7 +3,9 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 variables:
- projects: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
+- group: nuget-deployment
+- name: 'projects'
+  value: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
 
 trigger:
 - master
@@ -30,3 +32,11 @@ steps:
     nobuild: true
     versioningScheme: 'off'
     arguments: '-c Release --no-build /p:Version=1.0.$(Build.BuildId)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    custom: nuget
+    arguments: >
+      push "$(Build.ArtifactStagingDirectory)/*.nupkg"
+      - s "$(nuget.url)"
+      - k "$(nuget.key)"
