@@ -12,8 +12,14 @@ resources:
     - container: ci-build-dotnet
       image: mcr.microsoft.com/dotnet/core/sdk:3.1.101
 
+pr:
+- master
+
+trigger:
+- master
+
 jobs:
-  - job: 'build_test_pack'
+  - job: build_test_pack
     displayName: build, test and pack        
     pool:
       vmImage: "Ubuntu 16.04"
@@ -23,8 +29,9 @@ jobs:
       - script: dotnet test $(TestPath) -c Release
       - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
 
-  - job: 'Push_Package'
-    displayName: Push package    
+  - job: Push_Package
+    displayName: Push package
+    dependsOn: build_test_pack
     pool:
       vmImage: "Ubuntu 16.04"
     container: ci-build-dotnet    
