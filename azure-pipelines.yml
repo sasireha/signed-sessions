@@ -44,3 +44,4 @@ steps:
       push "$(Build.ArtifactStagingDirectory)/*.nupkg"
       -s "$(nuget.url)"
       -k "$(nuget.key)"
+      --skip-duplicate
