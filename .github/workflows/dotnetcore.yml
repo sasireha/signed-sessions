@@ -30,7 +30,7 @@ jobs:
     - name: Pack  
       run: dotnet pack --configuration Release --no-build /p:Version=1.0.$GITHUB_RUN_NUMBER
     - name: Push
-      run: dotnet nuget push <my project>/bin/Release/*.nupkg
+      run: dotnet nuget push **/bin/Release/*.nupkg
       #if: github.event.pull_request.merged == 'true'
       #End
       
