@@ -1,11 +1,16 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 variables:
 - group: nuget-deployment
-- name: 'projects'
-  value: 'PGO.Identity.SignedSessions\PGO.Identity.SignedSessions.csproj'
+- name: 'ProjectPath'
+  value: 'PGO.Identity.SignedSessions'
+- name: 'TestPath'
+  value: 'PGO.Identity.SignedSessions.Tests'
+- name: 'ReleasePath'
+  value: 'PGO.Identity.SignedSessions/bin/Release'
+
+resources:
+  containers:
+    - container: ci-build-dotnet
+      image: mcr.microsoft.com/dotnet/core/sdk:3.1.101
 
 pr:
 - master
@@ -13,34 +18,31 @@ pr:
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+jobs:
+  - job: build_test_pack
+    displayName: build, test and pack        
+    pool:
+      vmImage: "Ubuntu 16.04"
+    container: ci-build-dotnet    
+    steps:
+      - script: dotnet build $(ProjectPath) -c Release
+        displayName: 'Build'
+      - script: dotnet test $(TestPath) -c Release
+        displayName: 'Test'
+      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
+        displayName: 'Pack'
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.1.x'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'    
-    arguments: '-c Release'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'test'    
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'    
-    projects: $(projects)
-    nobuild: true
-    versioningScheme: 'off'
-    arguments: '-c Release --no-build /p:Version=1.0.$(Build.BuildId)'
-- task: DotNetCoreCLI@2
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
-  inputs:
-    command: custom
-    custom: nuget
-    arguments: >
-      push "$(Build.ArtifactStagingDirectory)/*.nupkg"
-      -s "$(nuget.url)"
-      -k "$(nuget.key)"
+  - job: Push_Package
+    displayName: Push package
+    dependsOn: build_test_pack
+    pool:
+      vmImage: "Ubuntu 16.04"
+    container: ci-build-dotnet    
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    steps:      
+      - script: dotnet build $(ProjectPath) -c Release
+        displayName: 'Build'      
+      - script: dotnet pack $(ProjectPath) -c Release --no-build /p:Version=1.0.$(Build.BuildId)
+        displayName: 'Pack'
+      - script: dotnet nuget push $(ReleasePath)/*.nupkg -k $(nuget.key) -s $(nuget.url) -n true
+        displayName: 'Push'
