@@ -19,7 +19,7 @@ jobs:
         dotnet-version: 3.1.101
         source-url: https://api.nuget.org/v3/index.json
       env: 
-        NUGET_AUTH_TOKEN: ${{ secrets.nugetKey }}
+        NUGET_AUTH_TOKEN: ${{ secrets.testOrgKey }}
 
     - name: Install dependencies
       run: dotnet restore
@@ -36,7 +36,7 @@ jobs:
       if: github.event_name == 'push' && success()
       
     - name: Push
-      run: dotnet nuget push **/bin/Release/*.nupkg -k ${{ secrets.nugetKey }}
+      run: dotnet nuget push **/bin/Release/*.nupkg -k ${{ secrets.testOrgKey }}
       if: github.event_name == 'push' && success()
       #End
       
