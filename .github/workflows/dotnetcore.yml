@@ -32,4 +32,5 @@ jobs:
     - name: Push
       run: dotnet nuget push <my project>/bin/Release/*.nupkg
       if: github.event.pull_request.merged == 'true'
+      #End
       
