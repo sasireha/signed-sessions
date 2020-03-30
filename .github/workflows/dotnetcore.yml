@@ -16,19 +16,23 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: 3.1.101
         source-url: https://api.nuget.org/v3/index.json
 
     - name: Install dependencies
       run: dotnet restore
+      
     - name: Build
       run: dotnet build --configuration Release --no-restore
+      
     - name: Test
       run: dotnet test --no-restore --verbosity normal
       if: success()
+      
     - name: Pack  
       run: dotnet pack --configuration Release --no-build /p:Version=1.0.$GITHUB_RUN_NUMBER
       if: success()
+      
     - name: Push
       run: dotnet nuget push **/bin/Release/*.nupkg -k ${{ secrets.nugetKey }}
       if: github.event_name == 'push' && success()
