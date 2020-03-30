@@ -17,6 +17,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
+        source-url: https://pkgs.dev.azure.com/<your-organization>/_packaging/<your-feed-name>/nuget/v3/index.json
+      env: 
+        NUGET_AUTH_TOKEN: ${secrets.nugetKey}
+
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -24,5 +28,8 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Pack  
-      run: dotnet pack --configuration Release --no-build /p:Version=1.0.$(Build.BuildId)
+      run: dotnet pack --configuration Release --no-build /p:Version=1.0.$GITHUB_RUN_NUMBER
+    - name: Push
+      run: dotnet nuget push <my project>/bin/Release/*.nupkg
+      if: github.action == push
       
