@@ -33,10 +33,10 @@ jobs:
       
     - name: Pack  
       run: dotnet pack --configuration Release --no-build /p:Version=1.0.$GITHUB_RUN_NUMBER
-      if: success()
+      if: github.event_name == 'push' && success()
       
-    - name: Push
-      run: dotnet nuget push **/bin/Release/*.nupkg 
+    - name: Pack and Push
+      run: dotnet nuget push **/bin/Release/*.nupkg -k ${{ secrets.nugetKey }}
       if: github.event_name == 'push' && success()
       #End
       
